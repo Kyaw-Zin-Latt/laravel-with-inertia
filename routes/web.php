@@ -17,13 +17,25 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/',function(){
-   return Inertia::render('Home',[
-       'time' => now()->toTimeString()
-   ]);
+
+Route::middleware("auth")->group(function (){
+
+    Route::get('/',function(){
+        return Inertia::render('Home',[
+            'time' => now()->toTimeString()
+        ]);
+    });
+
+    Route::get('/users',[UserController::class,'index'])->name('user.index');
+    Route::get('/user/create',[UserController::class,'create'])->name('user.create');
+    Route::post('/user',[UserController::class,'store']);
+    Route::get('/user/{user}/edit',[UserController::class,"edit"]);
+    Route::put('/user/{user}',[UserController::class,"update"])->name('user.update');
+    Route::delete('/user/{user}',[UserController::class,'destroy']);
+    Route::get('/setting',function(){
+        return Inertia::render('Setting');
+    });
+
 });
 
-Route::get('/users',[UserController::class,'index']);
-Route::get('/setting',function(){
-    return Inertia::render('Setting');
-});
+

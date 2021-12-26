@@ -1,98 +1,63 @@
 <template>
-    <Head title="Log in" />
+    <section class="main container">
+        <div class="row min-vh-100 justify-content-center align-items-center">
+            <div class="col-12 col-mg-6 col-lg-5">
+                <div class="my-5">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="" class="w-50" alt="">
+                    </div>
+                    <div class="border bg-white rounded-lg shadow-sm">
+                        <div class="p-4">
+                            <h2 class="text-center font-weight-normal">Sign In</h2>
+                            <p class="text-center text-black-50 mb-4">
+                                Don't have an account yet?
+                                <a :href="route('register')">Sign up here</a>
+                            </p>
+                            <hr class="mb-5">
+                            <form @submit.prevent="login()" method="post">
 
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <input v-model="form.email" id="email" type="email" class="form-control form-control-lg" name="email" required autocomplete="email" autofocus>
 
-        <jet-validation-errors class="mb-4" />
+                                </div>
+                                <div class="form-group my-3">
+                                    <div class="d-flex justify-content-between">
+                                        <label>Password</label>
+                                    </div>
+                                    <input v-model="form.password" id="password" type="password" class="form-control form-control-lg" name="password" required autocomplete="current-password">
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+                                </div>
+                                <button type="submit" class="w-100 btn btn-lg btn-block btn-primary">Sign in</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <jet-checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
-                </Link>
-
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetCheckbox from '@/Jetstream/Checkbox.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-    import { Head, Link } from '@inertiajs/inertia-vue3';
-
-    export default defineComponent({
-        components: {
-            Head,
-            JetAuthenticationCard,
-            JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetCheckbox,
-            JetLabel,
-            JetValidationErrors,
-            Link,
-        },
-
-        props: {
-            canResetPassword: Boolean,
-            status: String
-        },
-
+    export default {
+        name: "Login",
         data() {
             return {
-                form: this.$inertia.form({
+                form : {
                     email: '',
                     password: '',
-                    remember: false
-                })
+                }
             }
         },
-
         methods: {
-            submit() {
-                this.form
-                    .transform(data => ({
-                        ... data,
-                        remember: this.form.remember ? 'on' : ''
-                    }))
-                    .post(this.route('login'), {
-                        onFinish: () => this.form.reset('password'),
-                    })
+            login() {
+                this.$inertia.post(route('login'),this.form)
             }
-        }
-    })
+        },
+    }
 </script>
+
+<style scoped>
+
+</style>
