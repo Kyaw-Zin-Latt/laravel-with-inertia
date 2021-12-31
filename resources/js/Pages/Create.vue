@@ -32,18 +32,19 @@
 
 <script>
     import Layout from "@/Pages/Profile/Layout";
+    import { useForm } from '@inertiajs/inertia-vue3';
     export default {
         name: "Create",
         layout : Layout,
         props: ['errors'],
         data() {
             return {
-                form: {
+                form: useForm({
                     name: '',
                     email: '',
                     password: '',
                     photo: '',
-                }
+                })
             }
         },
         methods: {

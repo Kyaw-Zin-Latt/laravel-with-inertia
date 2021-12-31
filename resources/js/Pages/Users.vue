@@ -33,6 +33,7 @@
             <tr>
                 <th>#</th>
                 <th>Name</th>
+                <th>Image</th>
                 <th>Setting</th>
                 <th>Email</th>
             </tr>
@@ -41,6 +42,10 @@
             <tr v-for="user in users.data" :key="user.id">
                 <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
+                <td>
+                    <img class="rounded-circle" v-if="user.profile_photo_path == null" :src="user.profile_photo_url" alt="">
+                    <img class="rounded-circle circle" v-else :src="path+user.profile_photo_path" alt="">
+                </td>
                 <td>
                     <Link class="btn btn-outline-warning me-2" :href="'/user/'+user.id+'/edit'">Edit</Link>
                     <button @click="destroy(user.id)" class="btn btn-outline-danger">Delete</button>
@@ -65,7 +70,7 @@
         name: "Users",
         components: {Pagination},
         layout : Layout,
-        props: ['users','search'],
+        props: ['users','search','photo_path'],
         data() {
             return {
                 isMessage: true,
@@ -104,11 +109,20 @@
                     this.isMessage = false
                 }
                 return message;
+            },
+            path() {
+                return this.photo_path+"/";
             }
         },
     }
 </script>
 
 <style scoped>
+
+    .circle{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
 
 </style>
